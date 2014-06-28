@@ -19,3 +19,16 @@
 *.exe
 *.out
 *.app
+
+# Files created by Visual Studio 
+*.suo
+*.log
+/Debug
+/Quadris/Debug
+Quadris.sdf
+Quadris.opensdf
+
+# Windows thumbnails db
+Thumbs.db
+
+!lib/SDL
