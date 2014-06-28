@@ -53,6 +53,9 @@
       <AdditionalDependencies>SDL2.lib;SDL2main.lib</AdditionalDependencies>
       <SubSystem>Windows</SubSystem>
     </Link>
+    <PostBuildEvent>
+      <Command>copy /y ..\lib\SDL\lib\x86\SDL2.dll ..\Debug\</Command>
+    </PostBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>

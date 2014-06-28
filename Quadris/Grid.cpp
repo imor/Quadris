@@ -95,7 +95,7 @@ bool Grid::isValidPosition(Tetramino& tetramino)
 	{
 		int x = (tetraminoBlockOffsets[i].getX() + tetraminoOrigin.getX() - static_cast<int>(originX)) / blockWidth;
 		int y = (tetraminoOrigin.getY() + tetraminoBlockOffsets[i].getY() - static_cast<int>(originY)) / blockHeight;
-		if (x < 0 || x >= width || y < 0 || y >= height || blocks[x][y])
+		if (x < 0 || x >= static_cast<int>(width) || y < 0 || y >= static_cast<int>(height) || blocks[x][y])
 		{
 			return false;
 		}
