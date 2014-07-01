@@ -12,17 +12,22 @@ using namespace std;
 	+ indicates rotation anchor point
 */
 RightStep::RightStep(int originX, int originY, Texture* texture) :
-	Tetramino(originX, originY, texture)
+	Tetramino(originX, originY, 3, texture)
 {
-	blockOffsets[0].setX(0);
-	blockOffsets[0].setY(-texture->getHeight());
+	setOrigin(originX, originY);
+}
 
-	blockOffsets[1].setX(texture->getWidth());
-	blockOffsets[1].setY(-texture->getHeight());
+void RightStep::setOrigin(int x, int y)
+{
+	blockPositions[0].setX(x);
+	blockPositions[0].setY(y - texture->getHeight());
 
-	blockOffsets[2].setX(-texture->getWidth());
-	blockOffsets[2].setY(0);
+	blockPositions[1].setX(x + texture->getWidth());
+	blockPositions[1].setY(y - texture->getHeight());
 
-	blockOffsets[3].setX(0);
-	blockOffsets[3].setY(0);
+	blockPositions[2].setX(x - texture->getWidth());
+	blockPositions[2].setY(y);
+
+	blockPositions[3].setX(x);
+	blockPositions[3].setY(y);
 }

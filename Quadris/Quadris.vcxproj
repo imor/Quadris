@@ -100,7 +100,6 @@
     <ClInclude Include="Slab.h" />
     <ClInclude Include="Tetramino.h" />
     <ClInclude Include="TextureFactory.h" />
-    <ClInclude Include="Timer.h" />
     <ClInclude Include="VictoryStand.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

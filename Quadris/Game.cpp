@@ -67,14 +67,14 @@ int Game::Run()
 					unsigned int i;
 					for (i = 0; i < wallKicks->size(); ++i)
 					{
-						currentTetramino->offset(wallKicks->at(i).getX(), wallKicks->at(i).getY());
+						currentTetramino->moveBy(wallKicks->at(i).getX(), wallKicks->at(i).getY());
 						if (grid->isValidPosition(*currentTetramino))
 						{
 							break;
 						}
 						else
 						{
-							currentTetramino->offset(-wallKicks->at(i).getX(), -wallKicks->at(i).getY());
+							currentTetramino->moveBy(-wallKicks->at(i).getX(), -wallKicks->at(i).getY());
 						}
 					}
 					if (i == wallKicks->size())

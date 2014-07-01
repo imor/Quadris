@@ -3,19 +3,9 @@
 using namespace std;
 
 Slab::Slab(int originX, int originY, Texture* texture) :
-	Tetramino(originX, originY, texture)
+	Tetramino(originX, originY, 1, texture)
 {
-	blockOffsets[0].setX(-texture->getWidth());
-	blockOffsets[0].setY(0);
-
-	blockOffsets[1].setX(0);
-	blockOffsets[1].setY(0);
-
-	blockOffsets[2].setX(texture->getWidth());
-	blockOffsets[2].setY(0);
-
-	blockOffsets[3].setX(2 * texture->getWidth());
-	blockOffsets[3].setY(0);
+	setOrigin(originX, originY);
 
 	wallKickData[0].clear();
 	wallKickData[0].push_back(Point(0, 0));
@@ -46,24 +36,42 @@ Slab::Slab(int originX, int originY, Texture* texture) :
 	wallKickData[3].push_back(Point(-1, 2));
 }
 
+void Slab::setOrigin(int x, int y)
+{
+	blockPositions[0].setX(x - texture->getWidth());
+	blockPositions[0].setY(y);
+
+	blockPositions[1].setX(x);
+	blockPositions[1].setY(y);
+
+	blockPositions[2].setX(x + texture->getWidth());
+	blockPositions[2].setY(y);
+
+	blockPositions[3].setX(x + 2 * texture->getWidth());
+	blockPositions[3].setY(y);
+}
+
 void Slab::rotateCCW()
 {
 	Tetramino::rotateCCW();
 
-	switch (rotation)
+	for (auto& blockPosition : blockPositions)
 	{
-	case 0:
-		origin.setX(origin.getX() - texture->getWidth());
-		break;
-	case 90:
-		origin.setY(origin.getY() - texture->getHeight());
-		break;
-	case 180:
-		origin.setX(origin.getX() + texture->getWidth());
-		break;
-	case 270:
-		origin.setY(origin.getY() + texture->getHeight());
-		break;
+		switch (rotation)
+		{
+			case 0:
+				blockPosition.setX(blockPosition.getX() - texture->getWidth());
+				break;
+			case 90:
+				blockPosition.setY(blockPosition.getY() - texture->getHeight());
+				break;
+			case 180:
+				blockPosition.setX(blockPosition.getX() + texture->getWidth());
+				break;
+			case 270:
+				blockPosition.setY(blockPosition.getY() + texture->getHeight());
+				break;
+		}
 	}
 }
 
@@ -71,19 +79,22 @@ void Slab::rotateCW()
 {
 	Tetramino::rotateCW();
 
-	switch(rotation)
+	for (auto& blockPosition : blockPositions)
 	{
-	case 0:
-		origin.setY(origin.getY() - texture->getHeight());
-		break;
-	case 90:
-		origin.setX(origin.getX() + texture->getWidth());
-		break;
-	case 180:
-		origin.setY(origin.getY() + texture->getHeight());
-		break;
-	case 270:
-		origin.setX(origin.getX() - texture->getWidth());
-		break;
+		switch (rotation)
+		{
+		case 0:
+			blockPosition.setY(blockPosition.getY() - texture->getHeight());
+			break;
+		case 90:
+			blockPosition.setX(blockPosition.getX() + texture->getWidth());
+			break;
+		case 180:
+			blockPosition.setY(blockPosition.getY() + texture->getHeight());
+			break;
+		case 270:
+			blockPosition.setX(blockPosition.getX() - texture->getWidth());
+			break;
+		}
 	}
 }

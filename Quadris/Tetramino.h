@@ -9,11 +9,9 @@
 class Tetramino
 {
 public:
-	Tetramino(int originX, int originY, Texture* texture);
-	virtual ~Tetramino(){};
-	std::deque<Point> getBlockOffsets() const;
-	void setOrigin(int originX, int originY);
-	const Point& getOrigin() const;
+	Tetramino(int originX, int originY, unsigned int pivotBlockIndex, Texture* texture);
+	std::deque<Point> getBlockPositions() const;
+	const unsigned int getOrigin() const;
 	Texture* getTexture();
 	virtual void rotateCCW();
 	virtual void rotateCW();
@@ -21,27 +19,22 @@ public:
 	void moveRight();
 	void moveDown();
 	void moveUp();
-	void offset(int x, int y);
+	void moveBy(int x, int y);
 	void draw(int drawBlockBelow);
 	static Tetramino* getRandomTetramino(unsigned int gridOriginX, unsigned int gridOriginY);
 	const std::vector<Point>* getWallKickData();
 protected:
-	std::deque<Point> blockOffsets;
+	virtual void setOrigin(int originX, int originY);
+	std::deque<Point> blockPositions;
 	int rotation; // can have values of 0, 90, 180 & 270 only
-	Point origin; // origin of the Tetramino
+	unsigned int pivotBlockIndex; // origin of the Tetramino
 	Texture* texture;
 	std::vector<std::vector<Point>> wallKickData;
 };
 
-inline void Tetramino::setOrigin(int x, int y)
+inline const unsigned int Tetramino::getOrigin() const
 {
-	origin.setX(x);
-	origin.setY(y);
-}
-
-inline const Point& Tetramino::getOrigin() const
-{
-	return origin;
+	return pivotBlockIndex;
 }
 
 inline Texture* Tetramino::getTexture()

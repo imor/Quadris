@@ -17,6 +17,7 @@ class Crate : public Tetramino
 public:
 	void rotateCCW();
 	void rotateCW();
+	void setOrigin(int x, int y);
 	Crate(int originX, int originY, Texture* texture);
 };
 #endif //__CRATE_H__

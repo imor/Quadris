@@ -80,9 +80,6 @@
     <ClInclude Include="TextureFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Timer.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Crate.h">
       <Filter>Header Files\Tetraminoes</Filter>
     </ClInclude>

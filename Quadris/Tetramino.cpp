@@ -12,12 +12,12 @@
 
 using namespace std;
 
-Tetramino::Tetramino(int originX, int originY, Texture* texture) :
-	rotation(0), origin(originX, originY), texture(texture)
+Tetramino::Tetramino(int originX, int originY, unsigned int pivotBlockIndex, Texture* texture) :
+	rotation(0), texture(texture), pivotBlockIndex(pivotBlockIndex)
 {
 	for( int i = 0; i < 4; i++)
 	{
-		blockOffsets.push_back(Point());
+		blockPositions.push_back(Point());
 		wallKickData.push_back(vector<Point>());
 	}
 
@@ -46,9 +46,13 @@ Tetramino::Tetramino(int originX, int originY, Texture* texture) :
 	wallKickData[3].push_back(Point(1, 2));
 }
 
-std::deque<Point> Tetramino::getBlockOffsets() const
+void Tetramino::setOrigin(int x, int y)
 {
-	return blockOffsets;
+}
+
+std::deque<Point> Tetramino::getBlockPositions() const
+{
+	return blockPositions;
 }
 
 void Tetramino::rotateCCW()
@@ -58,13 +62,16 @@ void Tetramino::rotateCCW()
 	{
 		rotation = 270;
 	}
+
+	int originX = blockPositions[pivotBlockIndex].getX();
+	int originY = blockPositions[pivotBlockIndex].getY();
 	//A point (x,y) becomes (y,-x) after 90 degree CCW rotation
-	for (unsigned int i = 0; i < blockOffsets.size(); i++)
+	for (unsigned int i = 0; i < blockPositions.size(); i++)
 	{
-		int tempX = blockOffsets[i].getY();
-		int tempY = -blockOffsets[i].getX();
-		blockOffsets[i].setX(tempX);
-		blockOffsets[i].setY(tempY);
+		int tempX = (blockPositions[i].getY() - originY) + originX;
+		int tempY = -(blockPositions[i].getX() - originX) + originY;
+		blockPositions[i].setX(tempX);
+		blockPositions[i].setY(tempY);
 	}
 }
 
@@ -75,50 +82,67 @@ void Tetramino::rotateCW()
 	{
 		rotation = 0;
 	}
+	int originX = blockPositions[pivotBlockIndex].getX();
+	int originY = blockPositions[pivotBlockIndex].getY();
 	//A point (x,y) becomes (-y,x) after 90 degree CW rotation
-	for (unsigned int i = 0; i < blockOffsets.size(); i++)
+	for (unsigned int i = 0; i < blockPositions.size(); i++)
 	{
-		int tempX = -blockOffsets[i].getY();
-		int tempY = blockOffsets[i].getX();
-		blockOffsets[i].setX(tempX);
-		blockOffsets[i].setY(tempY);
+		int tempX = -(blockPositions[i].getY() - originY) + originX;
+		int tempY = (blockPositions[i].getX() - originX) + originY;
+		blockPositions[i].setX(tempX);
+		blockPositions[i].setY(tempY);
 	}
 }
 
 void Tetramino::moveRight()
 {
-	origin.setX(origin.getX() + texture->getWidth());
+	for (auto& blockPosition : blockPositions)
+	{
+		blockPosition.setX(blockPosition.getX() + texture->getWidth());
+	}
 }
 
 void Tetramino::moveLeft()
 {
-	origin.setX(origin.getX() - texture->getWidth());
+	for (auto& blockPosition : blockPositions)
+	{
+		blockPosition.setX(blockPosition.getX() - texture->getWidth());
+	}
 }
 
 void Tetramino::moveDown()
 {
-	origin.setY(origin.getY() + texture->getHeight());
+	for (auto& blockPosition : blockPositions)
+	{
+		blockPosition.setY(blockPosition.getY() + texture->getHeight());
+	}
 }
 
 void Tetramino::moveUp()
 {
-	origin.setY(origin.getY() - texture->getHeight());
+	for (auto& blockPosition : blockPositions)
+	{
+		blockPosition.setY(blockPosition.getY() + texture->getHeight());
+	}
 }
 
-void Tetramino::offset(int x, int y)
+void Tetramino::moveBy(int x, int y)
 {
-	origin.setX(origin.getX() + x * texture->getWidth());
-	origin.setY(origin.getY() + y * texture->getHeight());
+	for (auto& blockPosition : blockPositions)
+	{
+		blockPosition.setX(blockPosition.getX() + x * texture->getWidth());
+		blockPosition.setY(blockPosition.getY() + y * texture->getHeight());
+	}
 }
 
 void Tetramino::draw(int drawBlockBelow)
 {
-	for (unsigned int i = 0; i < blockOffsets.size(); i++)
+	for (unsigned int i = 0; i < blockPositions.size(); i++)
 	{
-		int y = blockOffsets[i].getY() + origin.getY();
+		int y = blockPositions[i].getY();
 		if (y >= drawBlockBelow)
 		{
-			texture->draw(blockOffsets[i].getX() + origin.getX(), y);
+			texture->draw(blockPositions[i].getX(), y);
 		}
 	}
 }

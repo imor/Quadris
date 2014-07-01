@@ -15,6 +15,7 @@ class VictoryStand : public Tetramino
 	+ indicates rotation anchor point
 */
 public:
+	void setOrigin(int x, int y);
 	VictoryStand(int originX, int originY, Texture* texture);
 };
 #endif //__VSTAND_H__

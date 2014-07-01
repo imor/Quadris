@@ -15,6 +15,7 @@ class Slab : public Tetramino
 public:
 	void rotateCCW();
 	void rotateCW();
+	void setOrigin(int x, int y);
 	Slab(int originX, int originY, Texture* texture);
 private:
 	void setRotation();

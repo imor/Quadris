@@ -15,6 +15,7 @@ class RightStep : public Tetramino
 	+ indicates rotation anchor point
 */
 public:
+	void setOrigin(int x, int y);
 	RightStep(int originX, int originY, Texture* texture);
 };
 #endif //__RIGHTSTEP_H__

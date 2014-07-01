@@ -32,21 +32,20 @@ void Grid::draw()
 
 bool Grid::canMoveLeft(Tetramino& tetramino)
 {
-	std::deque<Point> tetraminoBlockOffsets = tetramino.getBlockOffsets();
-	Point tetraminoOrigin = tetramino.getOrigin();
+	std::deque<Point> tetraminoBlockPositions = tetramino.getBlockPositions();
 	int blockWidth = tetramino.getTexture()->getWidth();
 	int blockHeight = tetramino.getTexture()->getHeight();
 
 	bool againstWallOrBlock = false;
-	for (unsigned int i = 0; i < tetraminoBlockOffsets.size(); i++)
+	for (unsigned int i = 0; i < tetraminoBlockPositions.size(); i++)
 	{
-		if (tetraminoBlockOffsets[i].getX() + tetraminoOrigin.getX() - originX == 0)
+		if (tetraminoBlockPositions[i].getX() == originX)
 		{
 			againstWallOrBlock = true;
 			break;
 		}
-		unsigned int x = (tetraminoBlockOffsets[i].getX() + tetraminoOrigin.getX() - originX) / blockWidth - 1;
-		unsigned int y = (tetraminoBlockOffsets[i].getY() + tetraminoOrigin.getY() - originY) / blockHeight;
+		unsigned int x = (tetraminoBlockPositions[i].getX() - originX) / blockWidth - 1;
+		unsigned int y = (tetraminoBlockPositions[i].getY() - originY) / blockHeight;
 		if (x >= 0 && x < width && blocks[x][y])
 		{
 			againstWallOrBlock = true;
@@ -59,21 +58,20 @@ bool Grid::canMoveLeft(Tetramino& tetramino)
 
 bool Grid::canMoveRight(Tetramino& tetramino)
 {
-	std::deque<Point> tetraminoBlockOffsets = tetramino.getBlockOffsets();
-	Point tetraminoOrigin = tetramino.getOrigin();
+	std::deque<Point> tetraminoBlockPositions = tetramino.getBlockPositions();
 	int blockWidth = tetramino.getTexture()->getWidth();
 	int blockHeight = tetramino.getTexture()->getHeight();
 
 	bool againstWallOrBlock = false;
-	for (unsigned int i = 0; i < tetraminoBlockOffsets.size(); i++)
+	for (unsigned int i = 0; i < tetraminoBlockPositions.size(); i++)
 	{
-		if (tetraminoBlockOffsets[i].getX() + tetraminoOrigin.getX() - originX == (width - 1) * blockWidth)
+		if (tetraminoBlockPositions[i].getX() == originX + (width - 1) * blockWidth)
 		{
 			againstWallOrBlock = true;
 			break;
 		}
-		unsigned int x = (tetraminoBlockOffsets[i].getX() + tetraminoOrigin.getX() - originX) / blockWidth + 1;
-		unsigned int y = (tetraminoBlockOffsets[i].getY() + tetraminoOrigin.getY() - originY) / blockHeight;
+		unsigned int x = (tetraminoBlockPositions[i].getX() - originX) / blockWidth + 1;
+		unsigned int y = (tetraminoBlockPositions[i].getY() - originY) / blockHeight;
 		if (x >= 0 && x < width && blocks[x][y])
 		{
 			againstWallOrBlock = true;
@@ -86,15 +84,14 @@ bool Grid::canMoveRight(Tetramino& tetramino)
 
 bool Grid::isValidPosition(Tetramino& tetramino)
 {
-	std::deque<Point> tetraminoBlockOffsets = tetramino.getBlockOffsets();
-	Point tetraminoOrigin = tetramino.getOrigin();
+	std::deque<Point> tetraminoBlockPositions = tetramino.getBlockPositions();
 	int blockWidth = tetramino.getTexture()->getWidth();
 	int blockHeight = tetramino.getTexture()->getHeight();
 
-	for (unsigned int i = 0; i < tetraminoBlockOffsets.size(); i++)
+	for (unsigned int i = 0; i < tetraminoBlockPositions.size(); i++)
 	{
-		int x = (tetraminoBlockOffsets[i].getX() + tetraminoOrigin.getX() - static_cast<int>(originX)) / blockWidth;
-		int y = (tetraminoOrigin.getY() + tetraminoBlockOffsets[i].getY() - static_cast<int>(originY)) / blockHeight;
+		int x = (tetraminoBlockPositions[i].getX() - static_cast<int>(originX)) / blockWidth;
+		int y = (tetraminoBlockPositions[i].getY() - static_cast<int>(originY)) / blockHeight;
 		if (x < 0 || x >= static_cast<int>(width) || y < 0 || y >= static_cast<int>(height) || blocks[x][y])
 		{
 			return false;
@@ -106,15 +103,14 @@ bool Grid::isValidPosition(Tetramino& tetramino)
 
 bool Grid::touchingFloorOrBlock(Tetramino& tetramino)
 {
-	std::deque<Point> tetraminoBlockOffsets = tetramino.getBlockOffsets();
-	Point tetraminoOrigin = tetramino.getOrigin();
+	std::deque<Point> tetraminoBlockPositions = tetramino.getBlockPositions();
 	int blockWidth = tetramino.getTexture()->getWidth();
 	int blockHeight = tetramino.getTexture()->getHeight();
 
-	for (unsigned int i = 0; i < tetraminoBlockOffsets.size(); i++)
+	for (unsigned int i = 0; i < tetraminoBlockPositions.size(); i++)
 	{
-		int x = (tetraminoBlockOffsets[i].getX() + tetraminoOrigin.getX() - static_cast<int>(originX)) / blockWidth;
-		int y = (tetraminoOrigin.getY() + tetraminoBlockOffsets[i].getY() - static_cast<int>(originY)) / blockHeight;
+		int x = (tetraminoBlockPositions[i].getX() - static_cast<int>(originX)) / blockWidth;
+		int y = (tetraminoBlockPositions[i].getY() - static_cast<int>(originY)) / blockHeight;
 		if (y == height - 1 || blocks[x][y + 1])
 		{
 			return true;
@@ -126,16 +122,15 @@ bool Grid::touchingFloorOrBlock(Tetramino& tetramino)
 
 void Grid::addTetraminoToGrid(Tetramino& tetramino)
 {
-	std::deque<Point> tetraminoBlockOffsets = tetramino.getBlockOffsets();
-	Point origin = tetramino.getOrigin();
+	std::deque<Point> tetraminoBlockPositions = tetramino.getBlockPositions();
 	int blockWidth = tetramino.getTexture()->getWidth();
 	int blockHeight = tetramino.getTexture()->getHeight();
 
-	for(unsigned int i = 0;i < tetraminoBlockOffsets.size();i++)
+	for(unsigned int i = 0;i < tetraminoBlockPositions.size();i++)
 	{
-		int x = (tetraminoBlockOffsets[i].getX() + origin.getX() - static_cast<int>(originX)) / blockWidth;
-		int y = (tetraminoBlockOffsets[i].getY() + origin.getY() - static_cast<int>(originY)) / blockHeight;
-		//y = height - y - 1;
+		int x = (tetraminoBlockPositions[i].getX() - static_cast<int>(originX)) / blockWidth;
+		int y = (tetraminoBlockPositions[i].getY() - static_cast<int>(originY)) / blockHeight;
+
 		blocks[x][y] = true;
 		blockTextures[x][y] = tetramino.getTexture();
 	}

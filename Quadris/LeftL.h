@@ -15,6 +15,7 @@ class LeftL : public Tetramino
 	+ indicates rotation anchor point
 */
 public:
+	void setOrigin(int x, int y);
 	LeftL(int originX, int originY, Texture* texture);
 };
 #endif //__LEFTL_H__
